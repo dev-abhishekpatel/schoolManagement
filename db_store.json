@@ -57,6 +57,21 @@
   ],
   "students": [
     {
+      "_id": "students_1787746480489",
+      "id": "students_1787746480489",
+      "createdAt": "2026-08-26T12:14:40.489Z",
+      "name": "USER",
+      "rollNo": "6545",
+      "rollNumber": "6545",
+      "admissionNo": "ADM-2026-6545",
+      "className": "10-A",
+      "gender": "Male",
+      "parentName": "GFHF",
+      "parentPhone": "45555555555555555555",
+      "attendancePercentage": 95,
+      "feeStatus": "PAID"
+    },
+    {
       "id": "stu_test",
       "name": "Test Student",
       "className": "10-A",
@@ -100,6 +115,19 @@
     }
   ],
   "teachers": [
+    {
+      "_id": "teachers_1787746323890",
+      "id": "teachers_1787746323890",
+      "createdAt": "2026-08-26T12:12:03.890Z",
+      "name": "ABHSIEK",
+      "email": "",
+      "phone": "8577745555",
+      "subject": "Mathematics",
+      "qualification": "M.Sc.",
+      "experience": "5 Yrs",
+      "salary": "₹50,000",
+      "classes": "Class 10-A"
+    },
     {
       "_id": "tch_1",
       "id": "tch_1",

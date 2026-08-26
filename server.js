@@ -9,8 +9,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-connectDB();
-
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/students', require('./routes/students'));
 app.use('/api/teachers', require('./routes/teachers'));
@@ -29,4 +27,13 @@ app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/reports', require('./routes/reports'));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+  connectDB();
+});
+
+server.on('error', (err) => {
+  console.error('❌ SERVER LISTEN ERROR:', err.message);
+});
+
+
