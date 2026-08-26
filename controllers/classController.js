@@ -5,7 +5,7 @@ exports.getAll = async (req, res) => {
     const classes = await ClassModel.find().populate('sections.classTeacher').sort({ name: 1 });
     res.json(classes);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Failed to fetch classes from MongoDB', error: err.message });
   }
 };
 
@@ -22,7 +22,6 @@ exports.getById = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const { name, section, roomNumber, classTeacher, sections, academicYear } = req.body;
-    
     let secArray = sections;
     if (!secArray || secArray.length === 0) {
       secArray = [{ name: section || 'A', classTeacher: classTeacher || null, roomNumber: roomNumber || '101' }];
@@ -38,7 +37,7 @@ exports.create = async (req, res) => {
     const populated = await ClassModel.findById(cls._id).populate('sections.classTeacher');
     res.status(201).json(populated);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to create class', error: err.message });
+    res.status(500).json({ msg: 'Failed to save class to MongoDB', error: err.message });
   }
 };
 
@@ -48,7 +47,7 @@ exports.update = async (req, res) => {
     if (!cls) return res.status(404).json({ msg: 'Class not found' });
     res.json(cls);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to update class', error: err.message });
+    res.status(500).json({ msg: 'Failed to update class in MongoDB', error: err.message });
   }
 };
 
@@ -56,8 +55,8 @@ exports.delete = async (req, res) => {
   try {
     const cls = await ClassModel.findByIdAndDelete(req.params.id);
     if (!cls) return res.status(404).json({ msg: 'Class not found' });
-    res.json({ msg: 'Class removed successfully' });
+    res.json({ msg: 'Class deleted from MongoDB' });
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to delete class', error: err.message });
+    res.status(500).json({ msg: 'Failed to delete class from MongoDB', error: err.message });
   }
 };

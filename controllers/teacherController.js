@@ -7,7 +7,7 @@ exports.getAll = async (req, res) => {
     const teachers = await Teacher.find().populate('assignedClasses user').sort({ createdAt: -1 });
     res.json(teachers);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Failed to fetch teachers from MongoDB', error: err.message });
   }
 };
 
@@ -24,8 +24,6 @@ exports.getById = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const { name, email, phone, subject, subjects, qualification, experience, salary } = req.body;
-    
-    // Create corresponding user if email provided
     let userObj = null;
     if (email) {
       userObj = await User.findOne({ email });
@@ -49,14 +47,14 @@ exports.create = async (req, res) => {
       qualification: qualification || 'M.Sc., B.Ed.',
       experience: experience ? Number(experience) : 5,
       subjects: subjects || (subject ? [subject] : ['General']),
-      joiningDate: req.body.joiningDate || new Date()
+      joiningDate: new Date()
     });
 
     await teacher.save();
     const populated = await Teacher.findById(teacher._id).populate('assignedClasses user');
     res.status(201).json(populated);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to create teacher', error: err.message });
+    res.status(500).json({ msg: 'Failed to save teacher to MongoDB', error: err.message });
   }
 };
 
@@ -66,7 +64,7 @@ exports.update = async (req, res) => {
     if (!teacher) return res.status(404).json({ msg: 'Teacher not found' });
     res.json(teacher);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to update teacher', error: err.message });
+    res.status(500).json({ msg: 'Failed to update teacher in MongoDB', error: err.message });
   }
 };
 
@@ -74,8 +72,8 @@ exports.delete = async (req, res) => {
   try {
     const teacher = await Teacher.findByIdAndDelete(req.params.id);
     if (!teacher) return res.status(404).json({ msg: 'Teacher not found' });
-    res.json({ msg: 'Teacher removed successfully' });
+    res.json({ msg: 'Teacher deleted from MongoDB' });
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to delete teacher', error: err.message });
+    res.status(500).json({ msg: 'Failed to delete teacher from MongoDB', error: err.message });
   }
 };

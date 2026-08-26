@@ -20,10 +20,10 @@ exports.register = async (req, res) => {
     await user.save();
 
     const payload = { user: { id: user.id, role: user.role } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET || 'school_management_jwt_secret_2026', { expiresIn: '7d' });
     res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
   } catch (err) {
-    res.status(500).send('Server error');
+    res.status(500).json({ msg: 'Registration error', error: err.message });
   }
 };
 
@@ -40,26 +40,27 @@ exports.login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
     const payload = { user: { id: user.id, role: user.role } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET || 'school_management_jwt_secret_2026', { expiresIn: '7d' });
     res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
   } catch (err) {
-    res.status(500).send('Server error');
+    res.status(500).json({ msg: 'Login error', error: err.message });
   }
 };
 
 exports.getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
+    if (!user) return res.status(404).json({ msg: 'User not found' });
     res.json(user);
   } catch (err) {
-    res.status(500).send('Server error');
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 };
 
 exports.seedDatabase = async (req, res) => {
   try {
     await seedData(true);
-    res.json({ msg: 'Database seeded successfully with demo data!' });
+    res.json({ msg: 'MongoDB database populated with demo data!' });
   } catch (err) {
     res.status(500).json({ msg: 'Seeding failed', error: err.message });
   }

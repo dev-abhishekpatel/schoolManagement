@@ -6,7 +6,7 @@ exports.getBooks = async (req, res) => {
     const books = await Book.find().sort({ createdAt: -1 });
     res.json(books);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Failed to fetch books from MongoDB', error: err.message });
   }
 };
 
@@ -23,16 +23,16 @@ exports.addBook = async (req, res) => {
     await book.save();
     res.status(201).json(book);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to add book', error: err.message });
+    res.status(500).json({ msg: 'Failed to save book to MongoDB', error: err.message });
   }
 };
 
 exports.deleteBook = async (req, res) => {
   try {
     await Book.findByIdAndDelete(req.params.id);
-    res.json({ msg: 'Book removed from library database' });
+    res.json({ msg: 'Book deleted from MongoDB' });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Failed to delete book from MongoDB', error: err.message });
   }
 };
 

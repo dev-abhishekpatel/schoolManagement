@@ -13,7 +13,7 @@ exports.create = async (req, res) => {
     const populated = await Notice.findById(notice._id).populate('createdBy targetClass');
     res.status(201).json(populated);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to create notice', error: err.message });
+    res.status(500).json({ msg: 'Failed to save notice to MongoDB', error: err.message });
   }
 };
 
@@ -22,15 +22,15 @@ exports.getAll = async (req, res) => {
     const notices = await Notice.find().populate('createdBy targetClass').sort({ createdAt: -1 });
     res.json(notices);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Failed to fetch notices from MongoDB', error: err.message });
   }
 };
 
 exports.delete = async (req, res) => {
   try {
     await Notice.findByIdAndDelete(req.params.id);
-    res.json({ msg: 'Notice deleted successfully' });
+    res.json({ msg: 'Notice deleted from MongoDB' });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Failed to delete notice from MongoDB', error: err.message });
   }
 };

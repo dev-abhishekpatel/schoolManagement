@@ -5,23 +5,22 @@ const connectDB = async () => {
   try {
     mongoose.set('strictQuery', false);
     await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 3000,
+      serverSelectionTimeoutMS: 5000,
     });
     console.log('✅ MongoDB Database Connected Successfully:', uri);
 
-    // Auto-seed database if empty
+    // Auto-seed MongoDB collections if empty
     const User = require('../models/User');
     const userCount = await User.countDocuments();
     if (userCount === 0) {
-      console.log('⚡ Empty Database Detected! Auto-populating initial school dataset...');
+      console.log('⚡ Empty MongoDB Collections Detected! Auto-populating initial dataset...');
       const seedData = require('../scripts/seedData');
       await seedData(true);
-      console.log('✅ Auto-Seeding Complete!');
+      console.log('✅ MongoDB Database Populated with Demo Data!');
     }
   } catch (err) {
-    console.warn('⚠️  MongoDB Direct Connection Warning:', err.message);
-    console.warn('⚠️  Connect to a local MongoDB daemon or set MONGO_URI in .env with valid credentials.');
-    mongoose.disconnect().catch(() => {});
+    console.error('❌ MongoDB Connection Failure:', err.message);
+    console.error('💡 Ensure local MongoDB service is running (e.g. systemctl start mongod) or set MONGO_URI in .env with valid credentials.');
   }
 };
 

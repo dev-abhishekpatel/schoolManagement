@@ -5,7 +5,7 @@ exports.getAll = async (req, res) => {
     const exams = await Exam.find().populate('class').sort({ createdAt: -1 });
     res.json(exams);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Failed to fetch exams from MongoDB', error: err.message });
   }
 };
 
@@ -35,7 +35,7 @@ exports.create = async (req, res) => {
     const populated = await Exam.findById(exam._id).populate('class');
     res.status(201).json(populated);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to create exam', error: err.message });
+    res.status(500).json({ msg: 'Failed to save exam to MongoDB', error: err.message });
   }
 };
 
@@ -45,7 +45,7 @@ exports.update = async (req, res) => {
     if (!exam) return res.status(404).json({ msg: 'Exam not found' });
     res.json(exam);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to update exam', error: err.message });
+    res.status(500).json({ msg: 'Failed to update exam in MongoDB', error: err.message });
   }
 };
 
@@ -53,8 +53,8 @@ exports.delete = async (req, res) => {
   try {
     const exam = await Exam.findByIdAndDelete(req.params.id);
     if (!exam) return res.status(404).json({ msg: 'Exam not found' });
-    res.json({ msg: 'Exam removed successfully' });
+    res.json({ msg: 'Exam deleted from MongoDB' });
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to delete exam', error: err.message });
+    res.status(500).json({ msg: 'Failed to delete exam from MongoDB', error: err.message });
   }
 };

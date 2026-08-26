@@ -6,7 +6,7 @@ exports.getBuses = async (req, res) => {
     const buses = await Bus.find().populate('route').sort({ createdAt: -1 });
     res.json(buses);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Failed to fetch buses from MongoDB', error: err.message });
   }
 };
 
@@ -23,16 +23,16 @@ exports.addBus = async (req, res) => {
     const populated = await Bus.findById(bus._id).populate('route');
     res.status(201).json(populated);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to add bus', error: err.message });
+    res.status(500).json({ msg: 'Failed to save bus to MongoDB', error: err.message });
   }
 };
 
 exports.deleteBus = async (req, res) => {
   try {
     await Bus.findByIdAndDelete(req.params.id);
-    res.json({ msg: 'Bus vehicle deleted' });
+    res.json({ msg: 'Bus vehicle deleted from MongoDB' });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Failed to delete bus from MongoDB', error: err.message });
   }
 };
 
@@ -41,7 +41,7 @@ exports.getRoutes = async (req, res) => {
     const routes = await Route.find().sort({ createdAt: -1 });
     res.json(routes);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Failed to fetch routes from MongoDB', error: err.message });
   }
 };
 
@@ -51,6 +51,6 @@ exports.addRoute = async (req, res) => {
     await route.save();
     res.status(201).json(route);
   } catch (err) {
-    res.status(500).json({ msg: 'Failed to add route', error: err.message });
+    res.status(500).json({ msg: 'Failed to save route to MongoDB', error: err.message });
   }
 };
