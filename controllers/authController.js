@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
+const seedData = require('../scripts/seedData');
 
 exports.register = async (req, res) => {
   const errors = validationResult(req);
@@ -19,8 +20,8 @@ exports.register = async (req, res) => {
     await user.save();
 
     const payload = { user: { id: user.id, role: user.role } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token });
+    const token = jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
   } catch (err) {
     res.status(500).send('Server error');
   }
@@ -39,8 +40,8 @@ exports.login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
     const payload = { user: { id: user.id, role: user.role } };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token });
+    const token = jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
   } catch (err) {
     res.status(500).send('Server error');
   }
@@ -52,5 +53,14 @@ exports.getMe = async (req, res) => {
     res.json(user);
   } catch (err) {
     res.status(500).send('Server error');
+  }
+};
+
+exports.seedDatabase = async (req, res) => {
+  try {
+    await seedData(true);
+    res.json({ msg: 'Database seeded successfully with demo data!' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Seeding failed', error: err.message });
   }
 };

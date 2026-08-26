@@ -21,5 +21,6 @@ router.post(
 );
 
 router.get('/me', auth, ctrl.getMe);
+router.post('/seed', ctrl.seedDatabase);
 
 module.exports = router;

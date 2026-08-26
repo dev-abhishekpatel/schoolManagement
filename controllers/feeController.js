@@ -7,36 +7,57 @@ exports.createFee = async (req, res) => {
     await fee.save();
     res.status(201).json(fee);
   } catch (err) {
-    res.status(500).send('Server error');
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 };
 
 exports.getFees = async (req, res) => {
   try {
-    const fees = await Fee.find();
+    const fees = await Fee.find().populate('class').sort({ createdAt: -1 });
     res.json(fees);
   } catch (err) {
-    res.status(500).send('Server error');
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+};
+
+exports.deleteFee = async (req, res) => {
+  try {
+    await Fee.findByIdAndDelete(req.params.id);
+    res.json({ msg: 'Fee schedule deleted' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 };
 
 exports.createPayment = async (req, res) => {
   try {
-    const payment = new Payment(req.body);
-    payment.status = 'Paid';
-    payment.paidAt = new Date();
+    const { student, fee, amount, method, reference } = req.body;
+    const payment = new Payment({
+      student,
+      fee,
+      amount,
+      method: method || 'Online',
+      reference: reference || `TXN-${Math.floor(100000 + Math.random() * 900000)}`,
+      status: 'Paid',
+      paidAt: new Date()
+    });
     await payment.save();
-    res.status(201).json(payment);
+    const populated = await Payment.findById(payment._id).populate('student fee');
+    res.status(201).json(populated);
   } catch (err) {
-    res.status(500).send('Server error');
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 };
 
 exports.getPayments = async (req, res) => {
   try {
-    const payments = await Payment.find().populate('student fee');
+    const query = {};
+    if (req.query.studentId) {
+      query.student = req.query.studentId;
+    }
+    const payments = await Payment.find(query).populate('student fee').sort({ createdAt: -1 });
     res.json(payments);
   } catch (err) {
-    res.status(500).send('Server error');
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 };

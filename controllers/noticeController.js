@@ -1,28 +1,36 @@
 const Notice = require('../models/Notice');
-const { uploadBuffer } = require('../services/cloudinary');
 
 exports.create = async (req, res) => {
   try {
-    const files = [];
-    if (req.files && req.files.length) {
-      for (const f of req.files) {
-        const result = await uploadBuffer(f.buffer, 'notices');
-        files.push(result.secure_url);
-      }
-    }
-    const notice = new Notice({ ...req.body, attachments: files, createdBy: req.user.id });
+    const { title, body, content, target, audience } = req.body;
+    const notice = new Notice({
+      title: title || 'School Announcement',
+      body: body || content || '',
+      target: target || audience || 'ALL',
+      createdBy: req.user ? req.user.id : null
+    });
     await notice.save();
-    res.status(201).json(notice);
+    const populated = await Notice.findById(notice._id).populate('createdBy targetClass');
+    res.status(201).json(populated);
   } catch (err) {
-    res.status(500).send('Server error');
+    res.status(500).json({ msg: 'Failed to create notice', error: err.message });
   }
 };
 
 exports.getAll = async (req, res) => {
   try {
-    const notices = await Notice.find().populate('createdBy targetClass');
+    const notices = await Notice.find().populate('createdBy targetClass').sort({ createdAt: -1 });
     res.json(notices);
   } catch (err) {
-    res.status(500).send('Server error');
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+};
+
+exports.delete = async (req, res) => {
+  try {
+    await Notice.findByIdAndDelete(req.params.id);
+    res.json({ msg: 'Notice deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 };

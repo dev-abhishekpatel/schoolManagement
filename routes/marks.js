@@ -4,6 +4,7 @@ const auth = require('../middleware/authMiddleware');
 const role = require('../middleware/roleMiddleware');
 const ctrl = require('../controllers/markController');
 
+router.get('/', auth, role('ADMIN','TEACHER','STUDENT','PARENT'), ctrl.getAll);
 router.post('/', auth, role('TEACHER','ADMIN'), ctrl.create);
 router.put('/:id', auth, role('TEACHER','ADMIN'), ctrl.update);
 router.get('/student/:studentId', auth, role('ADMIN','TEACHER','STUDENT','PARENT'), ctrl.getByStudent);
