@@ -6,19 +6,23 @@ const connectDB = async () => {
 
   try {
     await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 1500,
+      serverSelectionTimeoutMS: 4000,
     });
-    console.log('✅ MongoDB Database Connected Successfully:', uri);
+    console.log('✅ MongoDB database connected successfully:', uri);
+    return true;
   } catch (err) {
-    console.log('💡 Standalone MongoDB daemon not detected on 127.0.0.1:27017.');
+    console.warn('⚠️ MongoDB at localhost is not available. Trying an in-memory MongoDB instance for local development...');
+
     try {
       const { MongoMemoryServer } = require('mongodb-memory-server');
-      const mongod = await MongoMemoryServer.create();
-      const mongoUri = mongod.getUri();
+      const mongoMemoryServer = await MongoMemoryServer.create();
+      const mongoUri = mongoMemoryServer.getUri();
       await mongoose.connect(mongoUri);
-      console.log('✅ MongoDB Memory Server Connected Successfully at:', mongoUri);
-    } catch (memErr) {
-      console.log('✅ Database Engine ready: File-backed Database Store (db_store.json) active for all CRUD endpoints.');
+      console.log('✅ In-memory MongoDB connected successfully:', mongoUri);
+      return true;
+    } catch (memoryErr) {
+      console.error('❌ MongoDB connection failed:', memoryErr.message);
+      throw memoryErr;
     }
   }
 };

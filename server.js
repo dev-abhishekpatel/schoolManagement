@@ -27,13 +27,19 @@ app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/reports', require('./routes/reports'));
 
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-  connectDB();
-});
 
-server.on('error', (err) => {
-  console.error('❌ SERVER LISTEN ERROR:', err.message);
-});
+const startServer = async () => {
+  await connectDB();
+
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+
+  server.on('error', (err) => {
+    console.error('❌ SERVER LISTEN ERROR:', err.message);
+  });
+};
+
+startServer();
 
 

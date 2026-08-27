@@ -116,6 +116,19 @@
   ],
   "teachers": [
     {
+      "_id": "teachers_1787810690991",
+      "id": "teachers_1787810690991",
+      "createdAt": "2026-08-27T06:04:50.991Z",
+      "name": "rahul",
+      "email": "",
+      "phone": "04286386",
+      "subject": "Mathematics",
+      "qualification": "M.Sc.",
+      "experience": "5 Yrs",
+      "salary": "₹50,000",
+      "classes": "Class 10-A"
+    },
+    {
       "_id": "teachers_1787746323890",
       "id": "teachers_1787746323890",
       "createdAt": "2026-08-26T12:12:03.890Z",
