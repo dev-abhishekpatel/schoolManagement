@@ -87,7 +87,10 @@ startServer();
 
 // Serve frontend static build in production if available
 if (process.env.NODE_ENV === 'production') {
-  const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+  let frontendDist = path.join(__dirname, '..', 'frontend', 'dist_build');
+  if (!fs.existsSync(frontendDist)) {
+    frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+  }
   if (fs.existsSync(frontendDist)) {
     app.use(express.static(frontendDist));
     app.get('*', (req, res) => {

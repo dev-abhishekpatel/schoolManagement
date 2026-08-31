@@ -3,6 +3,80 @@ const path = require('path');
 
 const DB_FILE = path.join(__dirname, '../db_store.json');
 
+const defaultSeedData = {
+  users: [
+    { _id: 'usr_admin', id: 'usr_admin', name: 'Dr. Rajesh Sharma (Admin)', email: 'admin@school.com', password: 'password123', role: 'ADMIN' },
+    { _id: 'usr_teacher1', id: 'usr_teacher1', name: 'Mr. Rahul Verma', email: 'teacher@school.com', password: 'password123', role: 'TEACHER' },
+    { _id: 'usr_teacher2', id: 'usr_teacher2', name: 'Mrs. Priya Gupta', email: 'priya@school.com', password: 'password123', role: 'TEACHER' },
+    { _id: 'usr_student1', id: 'usr_student1', name: 'Aarav Kumar', email: 'student@school.com', password: 'password123', role: 'STUDENT' },
+    { _id: 'usr_student2', id: 'usr_student2', name: 'Ananya Sharma', email: 'ananya@school.com', password: 'password123', role: 'STUDENT' },
+    { _id: 'usr_parent', id: 'usr_parent', name: 'Mr. Suresh Kumar', email: 'parent@school.com', password: 'password123', role: 'PARENT' }
+  ],
+  classes: [
+    { _id: 'cls_10a', id: 'cls_10a', name: 'Class 10', section: 'A', roomNumber: '101-A', academicYear: '2025-2026', teacher: 'Mr. Rahul Verma' },
+    { _id: 'cls_10b', id: 'cls_10b', name: 'Class 10', section: 'B', roomNumber: '102-B', academicYear: '2025-2026', teacher: 'Mrs. Priya Gupta' },
+    { _id: 'cls_9a', id: 'cls_9a', name: 'Class 9', section: 'A', roomNumber: '201-A', academicYear: '2025-2026', teacher: 'Mr. Amit Joshi' }
+  ],
+  teachers: [
+    { _id: 'tch_1', id: 'tch_1', name: 'Mr. Rahul Verma', email: 'teacher@school.com', phone: '+91 98765 43210', subject: 'Mathematics', qualification: 'M.Sc. Mathematics, B.Ed.', experience: '8 Yrs', salary: '₹65,000', classes: 'Class 10-A' },
+    { _id: 'tch_2', id: 'tch_2', name: 'Mrs. Priya Gupta', email: 'priya@school.com', phone: '+91 98765 43211', subject: 'Science', qualification: 'M.Sc. Physics, Ph.D.', experience: '10 Yrs', salary: '₹72,000', classes: 'Class 10-B' }
+  ],
+  students: [
+    { _id: 'stu_1', id: 'stu_1', name: 'Aarav Kumar', rollNo: '1001', rollNumber: '1001', admissionNo: 'ADM-2024-001', className: 'Class 10-A', gender: 'Male', parentName: 'Mr. Suresh Kumar', parentPhone: '+91 91234 56789', attendancePercentage: 95.5, feeStatus: 'PAID' },
+    { _id: 'stu_2', id: 'stu_2', name: 'Ananya Sharma', rollNo: '1002', rollNumber: '1002', admissionNo: 'ADM-2024-002', className: 'Class 10-A', gender: 'Female', parentName: 'Ramesh Sharma', parentPhone: '+91 98111 22334', attendancePercentage: 93.8, feeStatus: 'PENDING' }
+  ],
+  leaveRequests: [
+    { _id: 'lr_1', id: 'lr_1', applicant: 'Mr. Rahul Verma', role: 'TEACHER', from: '2026-09-10', to: '2026-09-11', reason: 'Attending National Teachers Symposium Conference.', status: 'APPROVED', createdAt: '2026-08-25T10:00:00.000Z' },
+    { _id: 'lr_2', id: 'lr_2', applicant: 'Aarav Kumar', role: 'STUDENT', from: '2026-09-04', to: '2026-09-05', reason: 'Family event and medical checkup.', status: 'PENDING', createdAt: '2026-08-28T14:30:00.000Z' }
+  ],
+  attendance: [
+    { _id: 'att_1', id: 'att_1', student: 'stu_1', studentName: 'Aarav Kumar', class: 'Class 10-A', date: '2026-08-26', status: 'Present' },
+    { _id: 'att_2', id: 'att_2', student: 'stu_2', studentName: 'Ananya Sharma', class: 'Class 10-A', date: '2026-08-26', status: 'Absent' }
+  ],
+  books: [
+    { _id: 'bk_1', id: 'bk_1', title: 'Higher Algebra & Coordinate Geometry', author: 'Hall & Knight', category: 'Mathematics', isbn: '978-019871234', copies: 12, available: 12 },
+    { _id: 'bk_2', id: 'bk_2', title: 'Concepts of Physics (Vol 1)', author: 'H.C. Verma', category: 'Science', isbn: '978-817709187', copies: 18, available: 17 },
+    { _id: 'bk_3', id: 'bk_3', title: 'Encyclopedia of World History', author: 'William L. Langer', category: 'History', isbn: '978-039565237', copies: 8, available: 8 }
+  ],
+  bookIssues: [
+    { _id: 'bi_1', id: 'bi_1', book: 'bk_2', bookTitle: 'Concepts of Physics (Vol 1)', student: 'stu_1', studentName: 'Aarav Kumar', issueDate: '2026-08-20', returnDate: null, dueDate: '2026-09-05', status: 'ISSUED' }
+  ],
+  fees: [
+    { _id: 'fee_1', id: 'fee_1', title: 'Tuition Fee (Q2 - 2026)', description: 'Second Quarter Tuition & Lab charges', amount: 15000, class: 'Class 10-A', academicYear: '2025-2026' }
+  ],
+  payments: [
+    { _id: 'pmt_1', id: 'pmt_1', student: 'stu_1', studentName: 'Aarav Kumar', fee: 'fee_1', amount: 15000, method: 'UPI / Online', reference: 'TXN-984210', status: 'Paid', paidAt: '2026-08-01T10:00:00.000Z' },
+    { _id: 'pmt_2', id: 'pmt_2', student: 'stu_2', studentName: 'Ananya Sharma', fee: 'fee_1', amount: 15000, method: 'Net Banking', reference: 'TXN-102938', status: 'Pending', paidAt: null }
+  ],
+  notices: [
+    { _id: 'not_1', id: 'not_1', title: 'Annual Mid-Term Examination Schedule Released', body: 'The Mid-Term Exams for Class 9 through Class 12 start on September 15th.', target: 'ALL', createdAt: '2026-08-20T09:00:00.000Z' },
+    { _id: 'not_2', id: 'not_2', title: 'Parent-Teacher Meeting (PTM) Scheduled', body: 'First quarterly PTM will be held on Saturday from 9:00 AM to 1:00 PM.', target: 'PARENTS', createdAt: '2026-08-22T11:00:00.000Z' }
+  ],
+  exams: [
+    { _id: 'ex_1', id: 'ex_1', title: 'First Term Examination 2026', type: 'Term', className: 'Class 10-A', subjects: ['Mathematics', 'Science', 'English'], schedule: [ { subject: 'Mathematics', date: '2026-09-15', startTime: '09:00 AM', endTime: '12:00 PM', maxMarks: 100, passingMarks: 33 }, { subject: 'Science', date: '2026-09-17', startTime: '09:00 AM', endTime: '12:00 PM', maxMarks: 100, passingMarks: 33 } ] }
+  ],
+  marks: [
+    { _id: 'mrk_1', id: 'mrk_1', student: 'stu_1', studentName: 'Aarav Kumar', exam: 'ex_1', subject: 'Mathematics', theory: 72, practical: 20, internal: 8, total: 100, grade: 'A+' },
+    { _id: 'mrk_2', id: 'mrk_2', student: 'stu_2', studentName: 'Ananya Sharma', exam: 'ex_1', subject: 'Mathematics', theory: 65, practical: 19, internal: 8, total: 92, grade: 'A' }
+  ],
+  assignments: [
+    { _id: 'asg_1', id: 'asg_1', title: 'Quadratic Equations Worksheet', description: 'Solve problems 1 to 20 from Chapter 4.', assignedClass: 'Class 10-A', dueDate: '2026-09-02', status: 'Pending', createdAt: '2026-08-25T10:00:00.000Z' }
+  ],
+  submissions: [],
+  timetables: [
+    { _id: 'tt_1', id: 'tt_1', class: 'cls_10a', className: 'Class 10-A', academicYear: '2025-2026', slots: [ { day: 'Monday', start: '08:00 AM', end: '08:45 AM', subject: 'Mathematics', teacher: 'Mr. Rahul Verma', room: '101-A' }, { day: 'Monday', start: '08:45 AM', end: '09:30 AM', subject: 'Science', teacher: 'Mrs. Priya Gupta', room: 'Lab 2' } ] }
+  ],
+  buses: [
+    { _id: 'bus_1', id: 'bus_1', number: 'Bus 04', driver: 'Rameshwar Singh (+91 98112 33445)', vehicleNo: 'DL-01-AB-4321', route: 'North Delhi Express Route' }
+  ],
+  routes: [
+    { _id: 'rt_1', id: 'rt_1', name: 'North Delhi Express Route', stops: [ { name: 'Model Town Circle', pickupTime: '07:15 AM' }, { name: 'Civil Lines Station', pickupTime: '07:30 AM' }, { name: 'School Campus Gate 1', pickupTime: '07:55 AM' } ] }
+  ],
+  notifications: [
+    { _id: 'ntf_1', id: 'ntf_1', title: 'Welcome to School Management Portal', message: 'Explore your personalized dashboard to manage academic, fee, and class activities.', recipientRole: 'ALL', read: false }
+  ]
+};
+
 const dbData = {
   users: [],
   students: [],
@@ -17,6 +91,7 @@ const dbData = {
   submissions: [],
   timetables: [],
   books: [],
+  bookIssues: [],
   buses: [],
   routes: [],
   leaveRequests: [],
@@ -31,24 +106,24 @@ async function initLocalDb() {
         const parsed = JSON.parse(content);
         if (parsed && typeof parsed === 'object') {
           Object.keys(dbData).forEach((key) => {
-            dbData[key] = Array.isArray(parsed[key]) ? parsed[key] : [];
+            dbData[key] = Array.isArray(parsed[key]) && parsed[key].length > 0 ? parsed[key] : (defaultSeedData[key] || []);
           });
           console.log(`⚡ Loaded Persistent Local Database from db_store.json (${dbData.users.length} users, ${dbData.students.length} students)`);
           return dbData;
         }
       }
     } catch (e) {
-      console.warn('⚠️ Local database file is invalid or unreadable. Resetting to empty store...');
+      console.warn('⚠️ Local database file is invalid or unreadable. Resetting to default seed store...');
     }
   }
 
-  // Initialize empty persistent database; create data through app actions or a dedicated seed endpoint.
+  // Populate default seed data if DB file does not exist or was empty
   Object.keys(dbData).forEach((key) => {
-    dbData[key] = [];
+    dbData[key] = defaultSeedData[key] ? [...defaultSeedData[key]] : [];
   });
 
   saveLocalDb();
-  console.log('🌱 Initialized empty persistent local database. Add records through the app/database workflows.');
+  console.log(`🌱 Initialized persistent local database with comprehensive school demo data (${dbData.users.length} users, ${dbData.students.length} students).`);
   return dbData;
 }
 
