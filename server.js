@@ -28,6 +28,25 @@ const corsOptions = process.env.NODE_ENV === 'production'
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Root & API status endpoints (eliminates "Cannot GET /" when visiting backend URL directly)
+app.get('/', (req, res) => {
+  const isMongo = require('mongoose').connection.readyState === 1;
+  res.json({
+    status: 'online',
+    message: 'School Management System Backend API is running smoothly 🚀',
+    database: isMongo ? 'MongoDB Atlas (Connected)' : 'Local Persistent JSON Store (Active Fallback)'
+  });
+});
+
+app.get('/api', (req, res) => {
+  const isMongo = require('mongoose').connection.readyState === 1;
+  res.json({
+    status: 'online',
+    message: 'School Management System API Root',
+    database: isMongo ? 'MongoDB Atlas' : 'Local Persistent JSON Store'
+  });
+});
+
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/students', require('./routes/students'));
 app.use('/api/teachers', require('./routes/teachers'));
