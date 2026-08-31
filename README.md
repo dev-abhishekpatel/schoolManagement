@@ -1,4 +1,5 @@
-Local JSON DB usage
+##LIVE URL ##
+https://schoolmanagement-cybn.onrender.com/
 
 This backend can run with either a MongoDB (recommended) or a file-backed JSON store for quick local development.
 
