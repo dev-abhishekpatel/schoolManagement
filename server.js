@@ -28,7 +28,7 @@ const corsOptions = process.env.NODE_ENV === 'production'
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Root & API status endpoints (eliminates "Cannot GET /" when visiting backend URL directly)
+// Root & API status endpoints (eliminates "Cannot GET /" when visiting bac0kend URL directly)
 app.get('/', (req, res) => {
   const isMongo = require('mongoose').connection.readyState === 1;
   res.json({
