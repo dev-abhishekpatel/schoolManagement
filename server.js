@@ -5,7 +5,7 @@ const connectDB = require('./config/db');
 const path = require('path');
 const fs = require('fs');
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 
