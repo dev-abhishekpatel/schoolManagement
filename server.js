@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const path = require('path');
+const fs = require('fs');
 
 dotenv.config();
 
@@ -63,5 +65,19 @@ startServer();
 // When calling the API from the frontend and you need to send cookies/auth credentials,
 // ensure the client uses `withCredentials: true`, for example:
 // axios.get(url, { withCredentials: true });
+
+// Serve frontend static build in production if available
+if (process.env.NODE_ENV === 'production') {
+  const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+  if (fs.existsSync(frontendDist)) {
+    app.use(express.static(frontendDist));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(frontendDist, 'index.html'));
+    });
+    console.log('Serving frontend from', frontendDist);
+  } else {
+    console.warn('Frontend build not found at', frontendDist, '\nMake sure you build the frontend before starting the server.');
+  }
+}
 
 
