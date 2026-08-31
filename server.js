@@ -14,7 +14,7 @@ const app = express();
 // - In production restrict to the frontend deployed on Render and enable credentials
 const corsOptions = process.env.NODE_ENV === 'production'
   ? {
-      origin: 'https://school-frontend.onrender.com',
+      origin: process.env.FRONTEND_URL || 'https://school-frontend.onrender.com',
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
       allowedHeaders: ['Content-Type', 'Authorization']
