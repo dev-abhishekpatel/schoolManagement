@@ -6,7 +6,24 @@ const connectDB = require('./config/db');
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+// Environment-aware CORS configuration:
+// - In development allow any origin (useful for local testing)
+// - In production restrict to the frontend deployed on Render and enable credentials
+const corsOptions = process.env.NODE_ENV === 'production'
+  ? {
+      origin: 'https://school-frontend.onrender.com',
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+      allowedHeaders: ['Content-Type', 'Authorization']
+    }
+  : {
+      origin: '*',
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+      allowedHeaders: ['Content-Type', 'Authorization']
+    };
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/api/auth', require('./routes/auth'));
@@ -41,5 +58,10 @@ const startServer = async () => {
 };
 
 startServer();
+
+// Client-side usage note (example):
+// When calling the API from the frontend and you need to send cookies/auth credentials,
+// ensure the client uses `withCredentials: true`, for example:
+// axios.get(url, { withCredentials: true });
 
 

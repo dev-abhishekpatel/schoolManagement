@@ -109,12 +109,34 @@ async function initLocalDb() {
   return dbData;
 }
 
+let _writePromise = Promise.resolve();
+let _saveTimer = null;
+const SAVE_DEBOUNCE_MS = 100;
+
 function saveLocalDb() {
-  try {
-    fs.writeFileSync(DB_FILE, JSON.stringify(dbData, null, 2), 'utf8');
-  } catch (e) {
-    console.error('⚠️ Failed to save local DB:', e.message);
-  }
+  // Debounce rapid calls and serialize writes to avoid races.
+  if (_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => {
+    const data = JSON.stringify(dbData, null, 2);
+    const tmpFile = DB_FILE + '.tmp';
+
+    _writePromise = _writePromise.then(() => new Promise((resolve) => {
+      fs.writeFile(tmpFile, data, 'utf8', (err) => {
+        if (err) {
+          console.error('⚠️ Failed to write temp DB file:', err.message);
+          return resolve();
+        }
+        fs.rename(tmpFile, DB_FILE, (err2) => {
+          if (err2) {
+            console.error('⚠️ Failed to rename temp DB file:', err2.message);
+          }
+          resolve();
+        });
+      });
+    })).catch((e) => {
+      console.error('⚠️ Failed to save local DB:', e && e.message ? e.message : e);
+    });
+  }, SAVE_DEBOUNCE_MS);
 }
 
 module.exports = {

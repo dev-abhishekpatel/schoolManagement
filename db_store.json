@@ -68,7 +68,7 @@
       "gender": "Male",
       "parentName": "GFHF",
       "parentPhone": "45555555555555555555",
-      "attendancePercentage": 95,
+      "attendancePercentage": 99,
       "feeStatus": "PAID"
     },
     {
@@ -112,6 +112,36 @@
       "parentPhone": "+91 98111 22334",
       "attendancePercentage": 91.2,
       "feeStatus": "PENDING"
+    },
+    {
+      "name": "Test Student 0",
+      "rollNumber": "T-0",
+      "_id": "students_mtgv53pwcz4j49",
+      "id": "students_mtgv53pwcz4j49"
+    },
+    {
+      "name": "Test Student 1",
+      "rollNumber": "T-1",
+      "_id": "students_mtgv53pwzqy5zx",
+      "id": "students_mtgv53pwzqy5zx"
+    },
+    {
+      "name": "Test Student 2",
+      "rollNumber": "T-2",
+      "_id": "students_mtgv53pwa808h8",
+      "id": "students_mtgv53pwa808h8"
+    },
+    {
+      "name": "Test Student 3",
+      "rollNumber": "T-3",
+      "_id": "students_mtgv53pwld7m4v",
+      "id": "students_mtgv53pwld7m4v"
+    },
+    {
+      "name": "Test Student 4",
+      "rollNumber": "T-4",
+      "_id": "students_mtgv53pwomxq7n",
+      "id": "students_mtgv53pwomxq7n"
     }
   ],
   "teachers": [
@@ -262,15 +292,6 @@
   "timetables": [],
   "books": [
     {
-      "_id": "bk_1",
-      "id": "bk_1",
-      "title": "Higher Algebra & Coordinate Geometry",
-      "author": "Hall & Knight",
-      "category": "Mathematics",
-      "copies": 12,
-      "available": 12
-    },
-    {
       "_id": "bk_2",
       "id": "bk_2",
       "title": "Concepts of Physics (Vol 1)",
@@ -278,6 +299,36 @@
       "category": "Science",
       "copies": 18,
       "available": 18
+    },
+    {
+      "title": "Test Book 0",
+      "author": "Automated",
+      "_id": "books_mtgv53pwht3gek",
+      "id": "books_mtgv53pwht3gek"
+    },
+    {
+      "title": "Test Book 1",
+      "author": "Automated",
+      "_id": "books_mtgv53pwy5t15h",
+      "id": "books_mtgv53pwy5t15h"
+    },
+    {
+      "title": "Test Book 2",
+      "author": "Automated",
+      "_id": "books_mtgv53pwlmyvor",
+      "id": "books_mtgv53pwlmyvor"
+    },
+    {
+      "title": "Test Book 3",
+      "author": "Automated",
+      "_id": "books_mtgv53pw0ngcw3",
+      "id": "books_mtgv53pw0ngcw3"
+    },
+    {
+      "title": "Test Book 4",
+      "author": "Automated",
+      "_id": "books_mtgv53pwxvdn8s",
+      "id": "books_mtgv53pwxvdn8s"
     }
   ],
   "buses": [
